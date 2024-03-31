@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href /photo-facturing/",
+    "build": "ng build --base-href /photo-facturing/ --output-hashing=all",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -41,4 +41,3 @@
     "typescript": "~5.2.2"
   }
 }
-
