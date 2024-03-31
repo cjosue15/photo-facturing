@@ -1,12 +1,5 @@
 <style>
   :host {
-    --bright-blue: oklch(51.01% 0.274 263.83);
-    --electric-violet: oklch(53.18% 0.28 296.97);
-    --french-violet: oklch(47.66% 0.246 305.88);
-    --vivid-pink: oklch(69.02% 0.277 332.77);
-    --hot-red: oklch(61.42% 0.238 15.34);
-    --orange-red: oklch(63.32% 0.24 31.68);
-
     font-family:
       "Inter",
       -apple-system,
@@ -44,63 +37,5 @@
   <div class="bg-violet/15 p-6">
     <h1 class="text-violet font-semibold text-xl">Photo facturing</h1>
   </div>
-
-  <div class="w-full max-w-screen-sm mx-auto px-8">
-    <div class="w-full bg-gray-200 rounded-full h-4 my-10">
-      <div
-        class="bg-violet h-4 rounded-full"
-        [style.width]="percent() + '%'"
-      ></div>
-    </div>
-
-    <h1 class="font-bold text-2xl md:text-3xl mr-10">
-      Upload a photo of your invoince
-    </h1>
-
-    <div
-      class="h-[200px] w-full border-2 rounded-xl border-violet mt-10 flex items-center justify-center"
-    >
-      <div class="flex items-center justify-center flex-col">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="30"
-          height="30"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="icon icon-tabler icons-tabler-outline icon-tabler-file"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-          <path
-            d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"
-          />
-        </svg>
-        <span class="mt-4 font-semibold">Select File</span>
-      </div>
-    </div>
-
-    <p class="text-center text-xl font-semibold my-10">or</p>
-
-    <div class="flex items-center justify-center">
-      <button
-        class="bg-violet/15 text-violet font-bold w-full text-lg rounded-full py-4 px-4 hover:bg-violet/25 relative"
-      >
-        Open camera & Take photo
-
-        <input
-          type="file"
-          accept="image/*"
-          capture="camera"
-          (change)="onFileSelected($event)"
-          class="w-full h-full opacity-0 absolute inset-0 cursor-pointer"
-        />
-      </button>
-    </div>
-  </div>
+  <router-outlet></router-outlet>
 </main>
-
-<router-outlet></router-outlet>
