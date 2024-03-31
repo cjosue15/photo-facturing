@@ -25,9 +25,6 @@
   }
 
   h1 {
-    font-size: 20px;
-    line-height: 100%;
-    margin: 0;
     font-family:
       "Inter Tight",
       -apple-system,
@@ -44,21 +41,38 @@
 </style>
 
 <main>
-  <div class="bg-violet/15 py-6">
-    <h1 class="text-violet font-semibold">Photo facturing</h1>
+  <div class="bg-violet/15 p-6">
+    <h1 class="text-violet font-semibold text-xl">Photo facturing</h1>
   </div>
 
-  <button class="bg-violet text-white rounded-lg py-2 px-4 hover:bg-violet/90">
-    Open camera
+  <div class="w-full max-w-screen-sm mx-auto px-8">
+    <div class="w-full bg-gray-200 rounded-full h-4 my-10">
+      <div
+        class="bg-violet h-4 rounded-full"
+        [style.width]="percent() + '%'"
+      ></div>
+    </div>
 
-    <input
-      type="file"
-      accept="image/*"
-      capture="camera"
-      (change)="onFileSelected($event)"
-      class="w-full h-full opacity-0 absolute inset-0 cursor-pointer"
-    />
-  </button>
+    <h1 class="font-bold text-2xl md:text-3xl mr-10">
+      Upload a photo of your invoince
+    </h1>
+
+    <div class="flex items-center justify-center">
+      <button
+        class="bg-violet text-white rounded-lg py-2 px-4 hover:bg-violet/90 mt-[200px] relative"
+      >
+        Open camera
+
+        <input
+          type="file"
+          accept="image/*"
+          capture="camera"
+          (change)="onFileSelected($event)"
+          class="w-full h-full opacity-0 absolute inset-0 cursor-pointer"
+        />
+      </button>
+    </div>
+  </div>
 </main>
 
 <router-outlet></router-outlet>
