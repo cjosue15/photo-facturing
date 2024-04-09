@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, computed } from '@angular/core';
 import {
   Storage,
   ref,
@@ -26,6 +26,14 @@ export default class HomeCaptureComponent {
 
   susbscription: Subscription[] | undefined = undefined;
 
+  totalProgress = computed(() => {
+    if (this.files().length === 0) return 0;
+    return (
+      this.files().reduce((acc, file) => acc + file.progress!, 0) /
+      this.files().length
+    );
+  });
+
   onFileSelected(event: Event) {
     if (!event) return;
     const fileList = (event.target as HTMLInputElement).files;
@@ -45,14 +53,13 @@ export default class HomeCaptureComponent {
   }
 
   uploadFiles() {
-    console.log(this.files());
     for (const file of this.files()) {
       this.uploadFile(file);
     }
   }
 
   uploadFile({ file }: IFile) {
-    const storageRef = ref(this._storage, 'uploads/' + file.name);
+    const storageRef = ref(this._storage, '2024/' + file.name);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     if (this.susbscription && this.susbscription?.length > 0) {
