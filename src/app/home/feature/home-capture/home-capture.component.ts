@@ -1,4 +1,4 @@
-import { Component, signal, inject, computed } from '@angular/core';
+import { Component, signal, inject, computed, Signal } from '@angular/core';
 import {
   Storage,
   ref,
@@ -7,12 +7,14 @@ import {
 } from '@angular/fire/storage';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DomSanitizerPipe } from '../dom-sanitizer.pipe';
 
 type IFile = { file: File; preview: any; progress?: number };
 
 @Component({
   selector: 'app-home-capture',
   standalone: true,
+  imports: [DomSanitizerPipe],
   templateUrl: './home-capture.component.html',
 })
 export default class HomeCaptureComponent {
@@ -26,11 +28,13 @@ export default class HomeCaptureComponent {
 
   susbscription: Subscription[] | undefined = undefined;
 
-  totalProgress = computed(() => {
+  totalProgress: Signal<number> = computed(() => {
     if (this.files().length === 0) return 0;
-    return (
-      this.files().reduce((acc, file) => acc + file.progress!, 0) /
-      this.files().length
+    return Number(
+      (
+        this.files().reduce((acc, file) => acc + file.progress!, 0) /
+        this.files().length
+      ).toFixed(2)
     );
   });
 
@@ -41,12 +45,21 @@ export default class HomeCaptureComponent {
     if (!fileList || fileList.length === 0) return;
 
     for (const file of Array.from(fileList)) {
-      let reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        const preview = e.target?.result;
+      console.log(file.type);
+      if (file.type === 'application/pdf') {
+        const preview = URL.createObjectURL(file);
         this.files.update((prev) => [...prev, { file, preview, progress: 0 }]);
-      };
+      } else {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          const preview = e.target?.result;
+          this.files.update((prev) => [
+            ...prev,
+            { file, preview, progress: 0 },
+          ]);
+        };
+      }
     }
 
     this.showUploader.set(true);
