@@ -1,10 +1,11 @@
-import { Component, signal, inject, computed, Signal } from '@angular/core';
+import { Component, computed, inject, signal, Signal } from '@angular/core';
 import {
-  Storage,
-  ref,
-  uploadBytesResumable,
   percentage,
+  ref,
+  Storage,
+  uploadBytesResumable,
 } from '@angular/fire/storage';
+import { DataUrl, NgxImageCompressService } from 'ngx-image-compress';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DomSanitizerPipe } from '../dom-sanitizer.pipe';
@@ -19,6 +20,8 @@ type IFile = { file: File; preview: any; progress?: number };
 })
 export default class HomeCaptureComponent {
   private readonly _storage = inject(Storage);
+
+  private readonly imageCompress = inject(NgxImageCompressService);
 
   files = signal<IFile[]>([]);
 
@@ -45,7 +48,6 @@ export default class HomeCaptureComponent {
     if (!fileList || fileList.length === 0) return;
 
     for (const file of Array.from(fileList)) {
-      console.log(file.type);
       if (file.type === 'application/pdf') {
         const preview = URL.createObjectURL(file);
         this.files.update((prev) => [...prev, { file, preview, progress: 0 }]);
@@ -65,10 +67,50 @@ export default class HomeCaptureComponent {
     this.showUploader.set(true);
   }
 
-  uploadFiles() {
+  async uploadFiles() {
     for (const file of this.files()) {
-      this.uploadFile(file);
+      const image = await this._readFileAsDataURL(file.file);
+      const imageCompressed = await this.compressFile(image as string);
+      const blob = this._dataURLtoBlob(imageCompressed as string);
+      const compressedFile = new File([blob], file.file.name, {
+        type: file.file.type,
+      });
+
+      this.uploadFile({
+        file: compressedFile,
+        preview: file.preview,
+        progress: 0,
+      });
     }
+  }
+
+  compressFile(file: string) {
+    return this.imageCompress
+      .compressFile(file, 1, 50, 50)
+      .then((result: DataUrl) => {
+        return result;
+      });
+  }
+
+  private _readFileAsDataURL(file: File) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  private _dataURLtoBlob(dataURL: string): Blob {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)?.[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
   }
 
   uploadFile({ file }: IFile) {
