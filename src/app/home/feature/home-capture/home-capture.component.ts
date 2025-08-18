@@ -12,6 +12,8 @@ import { DomSanitizerPipe } from '../dom-sanitizer.pipe';
 
 type IFile = { file: File; preview: any; progress?: number };
 
+const FOLDER_NAME = '2025';
+
 @Component({
   selector: 'app-home-capture',
   standalone: true,
@@ -114,7 +116,7 @@ export default class HomeCaptureComponent {
   }
 
   uploadFile({ file }: IFile) {
-    const storageRef = ref(this._storage, '2024/' + file.name);
+    const storageRef = ref(this._storage, `${FOLDER_NAME}/` + file.name);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     if (this.susbscription && this.susbscription?.length > 0) {
