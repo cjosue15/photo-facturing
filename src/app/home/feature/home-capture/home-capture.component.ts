@@ -70,19 +70,31 @@ export default class HomeCaptureComponent {
   }
 
   async uploadFiles() {
-    for (const file of this.files()) {
-      const image = await this._readFileAsDataURL(file.file);
-      const imageCompressed = await this.compressFile(image as string);
-      const blob = this._dataURLtoBlob(imageCompressed as string);
-      const compressedFile = new File([blob], file.file.name, {
-        type: file.file.type,
-      });
+    try {
+      for (const file of this.files()) {
+        if (file.file.type === 'application/pdf') {
+          this.uploadFile({
+            file: file.file,
+            preview: file.preview,
+            progress: 0,
+          });
+        } else {
+          const image = await this._readFileAsDataURL(file.file);
+          const imageCompressed = await this.compressFile(image as string);
+          const blob = this._dataURLtoBlob(imageCompressed as string);
+          const compressedFile = new File([blob], file.file.name, {
+            type: file.file.type,
+          });
 
-      this.uploadFile({
-        file: compressedFile,
-        preview: file.preview,
-        progress: 0,
-      });
+          this.uploadFile({
+            file: compressedFile,
+            preview: file.preview,
+            progress: 0,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -142,6 +154,19 @@ export default class HomeCaptureComponent {
       });
 
     this.susbscription?.push(subscription);
+  }
+
+  onPdfLoad(event: Event) {
+    // Forzar un re-render del iframe para asegurar que el PDF se muestre correctamente
+    const iframe = event.target as HTMLIFrameElement;
+    if (iframe) {
+      // Pequeño delay para asegurar que el contenido esté completamente cargado
+      setTimeout(() => {
+        iframe.style.visibility = 'hidden';
+        iframe.offsetHeight; // Trigger reflow
+        iframe.style.visibility = 'visible';
+      }, 100);
+    }
   }
 
   ngOnDestroy() {

@@ -23,15 +23,34 @@
           ></div>
         </div>
       </div>
-      <div class="border-violet border-2 rounded-lg overflow-hidden">
+      <div class="border-violet border-2 rounded-lg overflow-hidden relative">
         @if (file.file.type.includes('image')) {
-        <img [src]="file.preview" />
+        <img [src]="file.preview" alt="Image preview" class="w-full h-auto" />
+        } @else if (file.file.type === 'application/pdf') {
+        <!-- PDF Preview with better handling -->
+        <div class="relative">
+          <iframe
+            [src]="file.preview | domSanitizer"
+            width="100%"
+            height="800px"
+            frameborder="0"
+            class="block bg-white"
+            (load)="onPdfLoad($event)"
+            loading="eager"
+          ></iframe>
+          <!-- Loading indicator -->
+          <div
+            class="absolute top-4 left-4 bg-white px-3 py-1 rounded shadow text-sm text-gray-600"
+          >
+            PDF Preview
+          </div>
+        </div>
         } @else {
-        <embed
-          [src]="file.preview | domSanitizer"
-          width="100%"
-          height="800px"
-        />
+        <!-- Fallback for other file types -->
+        <div class="p-8 text-center text-gray-500">
+          <p>Preview not available for this file type</p>
+          <p class="text-sm">{{ file.file.name }}</p>
+        </div>
         }
       </div>
     </div>
