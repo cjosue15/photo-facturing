@@ -12,7 +12,7 @@ import { DomSanitizerPipe } from '../dom-sanitizer.pipe';
 
 type IFile = { file: File; preview: any; progress?: number };
 
-const FOLDER_NAME = '2025';
+const FOLDER_NAME = '2026';
 
 @Component({
   selector: 'app-home-capture',
@@ -39,7 +39,7 @@ export default class HomeCaptureComponent {
       (
         this.files().reduce((acc, file) => acc + file.progress!, 0) /
         this.files().length
-      ).toFixed(2)
+      ).toFixed(2),
     );
   });
 
