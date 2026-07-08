@@ -1,0 +1,58 @@
+.update-banner {
+  animation: update-banner-slide-up 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  @starting-style {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+}
+
+.update-banner__dot {
+  animation: update-banner-pulse 1.6s ease-in-out infinite;
+}
+
+.update-banner__btn {
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    transform 100ms ease;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes update-banner-slide-up {
+  from {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes update-banner-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(128, 1, 198, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(128, 1, 198, 0.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .update-banner,
+  .update-banner__dot {
+    animation: none;
+  }
+
+  .update-banner__btn {
+    transition: none;
+  }
+}

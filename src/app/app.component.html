@@ -39,3 +39,46 @@
   </div>
   <router-outlet></router-outlet>
 </main>
+
+@if (showBanner()) {
+  <div
+    class="update-banner fixed inset-x-4 bottom-4 z-50 flex items-center gap-3
+           flex-wrap rounded-2xl border border-[#ece6f3] bg-white
+           px-4 py-3.5
+           shadow-[0_12px_32px_-8px_rgba(128,1,198,0.25),0_4px_12px_-2px_rgba(0,0,0,0.08)]
+           sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-md"
+    role="alert"
+    aria-live="polite"
+  >
+    <span
+      class="h-2 w-2 shrink-0 rounded-full bg-violet
+             shadow-[0_0_0_4px_rgba(128,1,198,0.18)] update-banner__dot"
+      aria-hidden="true"
+    ></span>
+    <span class="flex-1 text-[0.95rem] font-medium text-neutral-900">
+      Nueva versión disponible
+    </span>
+    <div class="flex gap-2 ml-auto">
+      <button
+        type="button"
+        class="update-banner__btn rounded-xl border border-[#e5dff0] bg-transparent
+               px-3.5 py-2 text-sm font-semibold text-neutral-600
+               hover:bg-[#f5f1fb] focus-visible:outline focus-visible:outline-2
+               focus-visible:outline-violet focus-visible:outline-offset-2"
+        (click)="dismissUpdate()"
+      >
+        Después
+      </button>
+      <button
+        type="button"
+        class="update-banner__btn rounded-xl border border-transparent bg-violet
+               px-3.5 py-2 text-sm font-semibold text-white
+               hover:bg-[#6a01a8] focus-visible:outline focus-visible:outline-2
+               focus-visible:outline-violet focus-visible:outline-offset-2"
+        (click)="reloadToUpdate()"
+      >
+        Actualizar
+      </button>
+    </div>
+  </div>
+}
