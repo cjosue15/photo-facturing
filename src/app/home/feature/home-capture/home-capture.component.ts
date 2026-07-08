@@ -8,16 +8,16 @@ import {
 import { DataUrl, NgxImageCompressService } from 'ngx-image-compress';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { RouterLink } from '@angular/router';
 import { DomSanitizerPipe } from '../dom-sanitizer.pipe';
+import { FOLDER_NAME } from '../storage.constants';
 
 type IFile = { file: File; preview: any; progress?: number };
-
-const FOLDER_NAME = '2025';
 
 @Component({
   selector: 'app-home-capture',
   standalone: true,
-  imports: [DomSanitizerPipe],
+  imports: [DomSanitizerPipe, RouterLink],
   templateUrl: './home-capture.component.html',
 })
 export default class HomeCaptureComponent {
