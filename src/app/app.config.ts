@@ -17,18 +17,16 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    importProvidersFrom(
-      provideFirebaseApp(() =>
-        initializeApp({
-          projectId: 'photo-facturing',
-          appId: '1:973961999376:web:8e71067f24c04fe024c695',
-          storageBucket: 'photo-facturing.appspot.com',
-          apiKey: 'AIzaSyAQPm2D81McsbFxRFadZfm_aaF5HRXZTVo',
-          authDomain: 'photo-facturing.firebaseapp.com',
-          messagingSenderId: '973961999376',
-        }),
-      ),
+    provideFirebaseApp(() =>
+      initializeApp({
+        projectId: 'photo-facturing',
+        appId: '1:973961999376:web:8e71067f24c04fe024c695',
+        storageBucket: 'photo-facturing.appspot.com',
+        apiKey: 'AIzaSyAQPm2D81McsbFxRFadZfm_aaF5HRXZTVo',
+        authDomain: 'photo-facturing.firebaseapp.com',
+        messagingSenderId: '973961999376',
+      })
     ),
-    importProvidersFrom(provideStorage(() => getStorage())),
+    provideStorage(() => getStorage()),
   ],
 };
